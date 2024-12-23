@@ -74,9 +74,12 @@ public class Home extends JFrame implements ActionListener {
             setVisible(false);
             new RemoveEmployee();
         } else if (ae.getSource() == exit) {
-             JOptionPane.showMessageDialog(null,"Do you want to Exit ?");
-            System.exit(0); // Exit the application
-        }
+            int response = JOptionPane.showConfirmDialog(null, "Do you want to Exit?", "Confirm Exit", JOptionPane.YES_NO_OPTION);
+            if (response == JOptionPane.YES_OPTION) {
+                System.exit(0); // Exit the application
+            }
+            // If NO is clicked, do nothing and return to the home page
+        }  
     }
 
     public static void main(String[] args) {
