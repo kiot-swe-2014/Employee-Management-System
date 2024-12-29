@@ -5,6 +5,8 @@ import java.awt.*;
 import javax.swing.*;
 import com.toedter.calendar.JDateChooser;
 import java.awt.event.*;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Random; // Ensure this import is present
 import java.util.regex.*;
 
@@ -144,7 +146,18 @@ public class AddEmployee extends JFrame implements ActionListener {
         if (ae.getSource() == add) {
             String name = tfname.getText().trim();
             String fname = tffname.getText().trim();
-            String dob = ((JTextField) dcdob.getDateEditor().getUiComponent()).getText();
+            
+            Date selectedDate = dcdob.getDate();
+            String dob = null;
+            
+            if (selectedDate != null)
+               {
+                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                    dob = sdf.format(selectedDate);
+                 } else {
+                      JOptionPane.showMessageDialog(null, "Date of Birth is required.");
+                       return;
+                  }
             String salary = tfsalary.getText().trim();
             String address = tfaddress.getText().trim();
             String phone = tfphone.getText().trim();

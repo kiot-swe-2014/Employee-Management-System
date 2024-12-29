@@ -3,12 +3,12 @@ package employee_management_system;
 
 import java.sql.*;
 
+    
 public class conn {
     
-    Connection c;
-    Statement s;
-    
-    
+  
+    public Connection c;
+    public Statement s;
     
     public conn(){
         

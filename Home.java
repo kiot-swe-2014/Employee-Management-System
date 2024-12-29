@@ -6,7 +6,7 @@ import java.awt.event.*;
 
 public class Home extends JFrame implements ActionListener {
 
-    JButton view, add, update, remove, exit;
+    JButton view, add, update, remove, exit,back;
 
     Home() {
         setLayout(null);
@@ -53,6 +53,11 @@ public class Home extends JFrame implements ActionListener {
         exit.setBounds(950, 500, 100, 40); // Positioning it at the bottom right
         exit.addActionListener(this);
         image.add(exit);
+        
+        back = new JButton("Back");
+        back.setBounds(850, 500, 100, 40); // Positioning it just before Exit button
+        back.addActionListener(this);
+        image.add(back);
 
         setSize(1120, 630);
         setLocation(250, 100);
@@ -79,7 +84,11 @@ public class Home extends JFrame implements ActionListener {
                 System.exit(0); // Exit the application
             }
             // If NO is clicked, do nothing and return to the home page
-        }  
+        }
+         else if (ae.getSource() == back) {
+            setVisible(false); // Hide current Home window
+            new login(); // Show the login page again
+        }
     }
 
     public static void main(String[] args) {

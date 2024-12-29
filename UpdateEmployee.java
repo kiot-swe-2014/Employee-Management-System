@@ -1,223 +1,224 @@
 
+
 package employee_management_system;
 
 import com.toedter.calendar.JDateChooser;
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.sql.*;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
+import java.sql.*;
+import java.util.Date;
 
 public class UpdateEmployee extends JFrame implements ActionListener {
 
-    // Global declaration 
-    JTextField tfeducation, tffname, tfaddress, tfphone, tfemail, tfsalary, tfdesignation, tfname;
-    JDateChooser dcdob;
-    JLabel lblempId;
+    JTextField tfname, tffname, tfsalary, tfaddress, tfphone, tfemail, tfdesignation;
+    JComboBox<String> tfeducation;  // Changed to JComboBox
     JButton updateButton, backButton;
+    JDateChooser dcdob;
     String empId;
 
-    UpdateEmployee(String empId) {
+    public UpdateEmployee(String empId) {
         this.empId = empId;
-        getContentPane().setBackground(Color.white);
-        setLayout(null);
 
-        JLabel heading = new JLabel("Update Employee Detail");
+        // Frame setup
+        setLayout(null);
+        setTitle("Update Employee Details");
+        setBounds(300, 50, 900, 700);
+        getContentPane().setBackground(Color.WHITE);
+
+        JLabel heading = new JLabel("Update Employee Details");
         heading.setBounds(320, 30, 500, 50);
-        heading.setFont(new Font("SAN_SERIF", Font.BOLD, 25));
+        heading.setFont(new Font("Raleway", Font.BOLD, 25));
         add(heading);
 
-        setupFormComponents();  // Setup form components
+        // Form Fields
+        JLabel lblname = new JLabel("Name:");
+        lblname.setBounds(50, 150, 150, 30);
+        lblname.setFont(new Font("Serif", Font.PLAIN, 20));
+        add(lblname);
 
-        // Fetch existing employee details
-        fetchEmployeeDetails();
+        tfname = new JTextField();
+        tfname.setBounds(200, 150, 200, 30);
+        add(tfname);
 
+        JLabel lblfname = new JLabel("Father's Name:");
+        lblfname.setBounds(450, 150, 150, 30);
+        lblfname.setFont(new Font("Serif", Font.PLAIN, 20));
+        add(lblfname);
+
+        tffname = new JTextField();
+        tffname.setBounds(650, 150, 200, 30);
+        add(tffname);
+
+        JLabel lbldob = new JLabel("Date of Birth:");
+        lbldob.setBounds(50, 200, 150, 30);
+        lbldob.setFont(new Font("Serif", Font.PLAIN, 20));
+        add(lbldob);
+
+        dcdob = new JDateChooser();
+        dcdob.setBounds(200, 200, 200, 30);
+        add(dcdob);
+
+        JLabel lblsalary = new JLabel("Salary:");
+        lblsalary.setBounds(450, 200, 150, 30);
+        lblsalary.setFont(new Font("Serif", Font.PLAIN, 20));
+        add(lblsalary);
+
+        tfsalary = new JTextField();
+        tfsalary.setBounds(650, 200, 200, 30);
+        add(tfsalary);
+
+        JLabel lbladdress = new JLabel("Address:");
+        lbladdress.setBounds(50, 250, 150, 30);
+        lbladdress.setFont(new Font("Serif", Font.PLAIN, 20));
+        add(lbladdress);
+
+        tfaddress = new JTextField();
+        tfaddress.setBounds(200, 250, 200, 30);
+        add(tfaddress);
+
+        JLabel lblphone = new JLabel("Phone:");
+        lblphone.setBounds(450, 250, 150, 30);
+        lblphone.setFont(new Font("Serif", Font.PLAIN, 20));
+        add(lblphone);
+
+        tfphone = new JTextField();
+        tfphone.setBounds(650, 250, 200, 30);
+        add(tfphone);
+
+        JLabel lblemail = new JLabel("Email:");
+        lblemail.setBounds(50, 300, 150, 30);
+        lblemail.setFont(new Font("Serif", Font.PLAIN, 20));
+        add(lblemail);
+
+        tfemail = new JTextField();
+        tfemail.setBounds(200, 300, 200, 30);
+        add(tfemail);
+
+        JLabel lbleducation = new JLabel("Highest Education:");
+        lbleducation.setBounds(450, 300, 150, 30);
+        lbleducation.setFont(new Font("Serif", Font.PLAIN, 20));
+        add(lbleducation);
+        
+        String[] courses = {"BBA", "BCA", "BA", "BSC", "B.COM", "BTech", "MBA", "MCA", "MA", "MTech", "MSC", "PHD"};
+        
+        // Create JComboBox and populate it with courses
+        tfeducation = new JComboBox<>(courses);
+        tfeducation.setBounds(650, 300, 200, 30);
+        add(tfeducation);
+
+        JLabel lbldesignation = new JLabel("Designation:");
+        lbldesignation.setBounds(50, 350, 150, 30);
+        lbldesignation.setFont(new Font("Serif", Font.PLAIN, 20));
+        add(lbldesignation);
+
+        tfdesignation = new JTextField();
+        tfdesignation.setBounds(200, 350, 200, 30);
+        add(tfdesignation);
+
+        // Buttons
         updateButton = new JButton("Update Details");
-        updateButton.setBounds(250, 550, 150, 40);
-        updateButton.addActionListener(this);
+        updateButton.setBounds(200, 500, 200, 50);
         updateButton.setBackground(Color.BLACK);
-        updateButton.setForeground(Color.white);
+        updateButton.setForeground(Color.WHITE);
+        updateButton.setFont(new Font("Serif", Font.PLAIN, 20));
+        updateButton.addActionListener(this);
         add(updateButton);
 
         backButton = new JButton("Back");
-        backButton.setBounds(450, 550, 150, 40);
-        backButton.addActionListener(this);
+        backButton.setBounds(450, 500, 200, 50);
         backButton.setBackground(Color.BLACK);
-        backButton.setForeground(Color.white);
+        backButton.setForeground(Color.WHITE);
+        backButton.setFont(new Font("Serif", Font.PLAIN, 20));
+        backButton.addActionListener(this);
         add(backButton);
 
-        setSize(900, 700);
-        setLocation(300, 50);
-        setVisible(true);
-    }
-
-    private void setupFormComponents() {
-        // Labels and TextFields setup
-        JLabel labelname = new JLabel("Name");
-        labelname.setBounds(50, 150, 150, 30);
-        labelname.setFont(new Font("serif", Font.PLAIN, 20));
-        add(labelname);
-
-        tfname = new JTextField();
-        tfname.setBounds(200, 150, 150, 30);
-        add(tfname);
-
-        JLabel labelfname = new JLabel("Father's Name");
-        labelfname.setBounds(400, 150, 150, 30);
-        labelfname.setFont(new Font("serif", Font.PLAIN, 20));
-        add(labelfname);
-
-        tffname = new JTextField();
-        tffname.setBounds(600, 150, 150, 30);
-        add(tffname);
-
-        JLabel labeldob = new JLabel("Date of Birth");
-        labeldob.setBounds(50, 200, 150, 30);
-        labeldob.setFont(new Font("serif", Font.PLAIN, 20));
-        add(labeldob);
-
-        dcdob = new JDateChooser();
-        dcdob.setBounds(200, 200, 150, 30);
-        add(dcdob);
-
-        JLabel labelsalary = new JLabel("Salary");
-        labelsalary.setBounds(400, 200, 150, 30);
-        labelsalary.setFont(new Font("serif", Font.PLAIN, 20));
-        add(labelsalary);
-
-        tfsalary = new JTextField();
-        tfsalary.setBounds(600, 200, 150, 30);
-        add(tfsalary);
-
-        JLabel labeladdress = new JLabel("Address");
-        labeladdress.setBounds(50, 250, 150, 30);
-        labeladdress.setFont(new Font("serif", Font.PLAIN, 20));
-        add(labeladdress);
-
-        tfaddress = new JTextField();
-        tfaddress.setBounds(200, 250, 150, 30);
-        add(tfaddress);
-
-        JLabel labelphone = new JLabel("Phone");
-        labelphone.setBounds(400, 250, 150, 30);
-        labelphone.setFont(new Font("serif", Font.PLAIN, 20));
-        add(labelphone);
-
-        tfphone = new JTextField();
-        tfphone.setBounds(600, 250, 150, 30);
-        add(tfphone);
-
-        JLabel labelemail = new JLabel("Email");
-        labelemail.setBounds(50, 300, 150, 30);
-        labelemail.setFont(new Font("serif", Font.PLAIN, 20));
-        add(labelemail);
-
-        tfemail = new JTextField();
-        tfemail.setBounds(200, 300, 150, 30);
-        add(tfemail);
-
-        JLabel labeleducation = new JLabel("Highest Education");
-        labeleducation.setBounds(400, 300, 150, 30);
-        labeleducation.setFont(new Font("serif", Font.PLAIN, 20));
-        add(labeleducation);
-
-        tfeducation = new JTextField();
-        tfeducation.setBounds(600, 300, 150, 30);
-        add(tfeducation);
-
-        JLabel labeldesignation = new JLabel("Designation");
-        labeldesignation.setBounds(50, 350, 150, 30);
-        labeldesignation.setFont(new Font("serif", Font.PLAIN, 20));
-        add(labeldesignation);
-
-        tfdesignation = new JTextField();
-        tfdesignation.setBounds(200, 350, 150, 30);
-        add(tfdesignation);
-
-        JLabel labelempId = new JLabel("Employee Id");
-        labelempId.setBounds(50, 400, 150, 30);
-        labelempId.setFont(new Font("serif", Font.PLAIN, 20));
-        add(labelempId);
-
-        this.lblempId = new JLabel();
-        this.lblempId.setBounds(200, 400, 150, 30);
-        this.lblempId.setFont(new Font("serif", Font.PLAIN, 20));
-        add(this.lblempId);
-    }
-
-    private void fetchEmployeeDetails() {
+        // Fetch existing data
         try {
             conn c = new conn();
-            String query = "SELECT * FROM employee WHERE empId = '" + empId + "'";
-            ResultSet rs = c.s.executeQuery(query);
+            String query = "SELECT * FROM employee WHERE empId=?";
+            PreparedStatement ps = c.c.prepareStatement(query);
+            ps.setString(1, empId);
+            ResultSet rs = ps.executeQuery();
+
             if (rs.next()) {
                 tfname.setText(rs.getString("name"));
                 tffname.setText(rs.getString("fname"));
-                String dobString = rs.getString("dob");
-                if (dobString != null) {  // Check if dobString is not null
-                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-                    try {
-                        java.util.Date dob = sdf.parse(dobString); // Parse the date string
-                        dcdob.setDate(dob); // Set the date in the JDateChooser
-                    } catch (ParseException e) {
-                        e.printStackTrace(); // Handle parsing exception
-                    }
-                }
-                tfaddress.setText(rs.getString("address"));
+                dcdob.setDate(rs.getDate("dob"));
                 tfsalary.setText(rs.getString("salary"));
+                tfaddress.setText(rs.getString("address"));
                 tfphone.setText(rs.getString("phone"));
                 tfemail.setText(rs.getString("email"));
-                tfeducation.setText(rs.getString("education"));
-                lblempId.setText(rs.getString("empId"));
+                tfeducation.setSelectedItem(rs.getString("education"));  // Use setSelectedItem instead of setText
                 tfdesignation.setText(rs.getString("designation"));
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        setVisible(true);
     }
 
     public void actionPerformed(ActionEvent ae) {
         if (ae.getSource() == updateButton) {
-            String name = tfname.getText();
-            String fname = tffname.getText();
-
-            // Get date of birth properly
-            java.util.Date date = dcdob.getDate(); // Get the date from JDateChooser
-            java.sql.Date sqlDate = null; // Initialize sqlDate
-
-            if (date != null) {
-                sqlDate = new java.sql.Date(date.getTime()); // Convert to java.sql.Date
-            } else {
-                JOptionPane.showMessageDialog(null, "Please select a valid date of birth.");
-                return; // Exit if no date is selected
-            }
-
-            String salary = tfsalary.getText();
-            String address = tfaddress.getText();
-            String phone = tfphone.getText();
-            String email = tfemail.getText();
-            String education = tfeducation.getText();
-            String designation = tfdesignation.getText();
-
             try {
+                String name = tfname.getText();
+                String fname = tffname.getText();
+                String salary = tfsalary.getText();
+                String address = tfaddress.getText();
+                String phone = tfphone.getText();
+                String email = tfemail.getText();
+                String education = (String) tfeducation.getSelectedItem();  // Get the selected item from JComboBox
+                String designation = tfdesignation.getText();
+                Date date = dcdob.getDate();
+                java.sql.Date sqlDate = (date != null) ? new java.sql.Date(date.getTime()) : null;
+
+                // Validation Logic
+                if (sqlDate == null || salary.isEmpty() || !salary.matches("\\d+") || !phone.matches("\\d{10}")) {
+                    JOptionPane.showMessageDialog(null, "Validation Failed! Please correct the fields.");
+                    return;
+                }
+
                 conn c = new conn();
-                String query = "UPDATE employee SET name = '" + name + "', fname = '" + fname + "', dob = '" + sqlDate + "', salary = '" + salary + "', address = '" + address + "', phone = '" + phone + "', email = '" + email + "', education = '" + education + "', designation = '" + designation + "' WHERE empId = '" + empId + "'";
-                c.s.executeUpdate(query);
-                JOptionPane.showMessageDialog(null, "Details updated successfully");
-                setVisible(false);
-                new Home();
+                String query = "UPDATE employee SET name=?, fname=?, dob=?, salary=?, address=?, phone=?, email=?, education=?, designation=? WHERE empId=?";
+                PreparedStatement ps = c.c.prepareStatement(query);
+                ps.setString(1, name);
+                ps.setString(2, fname);
+                ps.setDate(3, sqlDate);
+                ps.setString(4, salary);
+                ps.setString(5, address);
+                ps.setString(6, phone);
+                ps.setString(7, email);
+                ps.setString(8, education);
+                ps.setString(9, designation);
+                ps.setString(10, empId);
+
+                int result = ps.executeUpdate();
+                if (result > 0) {
+                    JOptionPane.showMessageDialog(null, "Details Updated Successfully!");
+                    setVisible(false);
+                    new Home();
+                } else {
+                    JOptionPane.showMessageDialog(null, "Failed to Update Details!");
+                }
             } catch (Exception e) {
                 e.printStackTrace();
             }
-        } else {
-            setVisible(false);
-            new Home();
+        } else if (ae.getSource() == backButton) {
+            int confirmation = JOptionPane.showConfirmDialog(
+                null, 
+                "Are you sure you want to go back? Unsaved changes will be lost.", 
+                "Confirm Back", 
+                JOptionPane.YES_NO_OPTION
+            );
+            if (confirmation == JOptionPane.YES_OPTION) {
+                setVisible(false);
+                new Home();
+            }
         }
     }
 
     public static void main(String[] args) {
-        new UpdateEmployee("empId"); 
+        new UpdateEmployee("empId"); // Pass Employee ID for testing
     }
 }
