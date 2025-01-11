@@ -138,20 +138,28 @@ public class RemoveEmployee extends JFrame implements ActionListener{
         
     }
     public void actionPerformed(ActionEvent ae){
-        if(ae.getSource()== delete){
-            try{
-                conn c =  new conn();
-                String query = "delete from employee where empId = '"+cEmpId.getSelectedItem()+"'";
-                c.s.executeUpdate(query);
-                JOptionPane.showMessageDialog(null, "Employee Information Delated Successfully");
-                setVisible(false);
-                new Home();
-                
-            }catch(Exception e){
-                e.printStackTrace();
+   if (ae.getSource() == delete) {
+            // Show confirmation dialog
+            int response = JOptionPane.showConfirmDialog(null, 
+                "Are you sure you want to delete this employee?", 
+                "Confirm Delete", 
+                JOptionPane.YES_NO_OPTION, 
+                JOptionPane.WARNING_MESSAGE);
+
+            // Check the user's response
+            if (response == JOptionPane.YES_OPTION) {
+                try {
+                    conn c = new conn();
+                    String query = "DELETE FROM employee WHERE empId = '" + cEmpId.getSelectedItem() + "'";
+                    c.s.executeUpdate(query);
+                    JOptionPane.showMessageDialog(null, "Employee Information Deleted Successfully");
+                    setVisible(false);
+                    new Home();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
-            
-        }else{
+        } else {
             setVisible(false);
             new Home();
         }
@@ -162,3 +170,6 @@ public class RemoveEmployee extends JFrame implements ActionListener{
         new RemoveEmployee();
     }
 }
+
+
+
